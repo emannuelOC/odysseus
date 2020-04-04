@@ -34,7 +34,7 @@ extension SpeechRecognizer {
 }
 
 @available(iOS 13.0, *)
-class Odysseus: NSObject, SpeechRecognizer, ObservableObject {
+class SpeechRecognizer: NSObject, SpeechRecognizer, ObservableObject {
         
     @Published var results = "" {
         willSet {
@@ -124,7 +124,7 @@ class Odysseus: NSObject, SpeechRecognizer, ObservableObject {
 }
 
 @available(iOS 13.0, *)
-extension Odysseus {
+extension SpeechRecognizer {
     
     fileprivate func measureAudio(buffer: AVAudioPCMBuffer) {
         audioLevel = 7000.0 / audioMeasurer.level(for: buffer)
@@ -149,7 +149,7 @@ extension Odysseus {
 
 
 @available(iOS 13.0, *)
-extension Odysseus: SFSpeechRecognizerDelegate {
+extension SpeechRecognizer: SFSpeechRecognizerDelegate {
     
     func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer,
                           availabilityDidChange available: Bool) {
