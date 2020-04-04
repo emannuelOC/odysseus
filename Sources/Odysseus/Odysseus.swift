@@ -33,6 +33,7 @@ extension SpeechRecognizer {
     }
 }
 
+@available(iOS 13.0, *)
 class Odysseus: NSObject, SpeechRecognizer, ObservableObject {
         
     @Published var results = "" {
@@ -122,6 +123,7 @@ class Odysseus: NSObject, SpeechRecognizer, ObservableObject {
     
 }
 
+@available(iOS 13.0, *)
 extension Odysseus {
     
     fileprivate func measureAudio(buffer: AVAudioPCMBuffer) {
@@ -146,6 +148,7 @@ extension Odysseus {
 }
 
 
+@available(iOS 13.0, *)
 extension Odysseus: SFSpeechRecognizerDelegate {
     
     func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer,
