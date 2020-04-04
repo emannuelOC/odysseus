@@ -34,7 +34,7 @@ extension SpeechRecognizer {
 }
 
 @available(iOS 13.0, *)
-class SpeechRecognizer: NSObject, SpeechRecognizer, ObservableObject {
+class Recognizer: NSObject, SpeechRecognizer, ObservableObject {
         
     @Published var results = "" {
         willSet {
@@ -124,7 +124,7 @@ class SpeechRecognizer: NSObject, SpeechRecognizer, ObservableObject {
 }
 
 @available(iOS 13.0, *)
-extension SpeechRecognizer {
+extension Recognizer {
     
     fileprivate func measureAudio(buffer: AVAudioPCMBuffer) {
         audioLevel = 7000.0 / audioMeasurer.level(for: buffer)
@@ -149,7 +149,7 @@ extension SpeechRecognizer {
 
 
 @available(iOS 13.0, *)
-extension SpeechRecognizer: SFSpeechRecognizerDelegate {
+extension Recognizer: SFSpeechRecognizerDelegate {
     
     func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer,
                           availabilityDidChange available: Bool) {
