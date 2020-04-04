@@ -10,7 +10,7 @@ import Foundation
 import Accelerate
 import Speech
 
-enum SpeechRecognizerStatus {
+public enum SpeechRecognizerStatus {
     case waiting, authorized, denied
 }
 
@@ -36,17 +36,17 @@ extension SpeechRecognizer {
 @available(iOS 13.0, *)
 public class Recognizer: NSObject, SpeechRecognizer, ObservableObject {
         
-    @Published var results = "" {
+    @Published public var results = "" {
         willSet {
             objectWillChange.send()
         }
     }
     
-    var audioLevel = 0.0
+    public var audioLevel = 0.0
     
-    var isAvailable = true
+    public var isAvailable = true
     
-    var authorizationStatus = SpeechRecognizerStatus.waiting
+    public var authorizationStatus = SpeechRecognizerStatus.waiting
     
     private var speechRecognizer: SFSpeechRecognizer?
     
