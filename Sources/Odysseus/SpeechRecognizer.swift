@@ -60,7 +60,7 @@ public class Recognizer: NSObject, SpeechRecognizer, ObservableObject {
     
     private var node: AVAudioInputNode?
     
-    init(locale: Locale = Locale(identifier: "pt-BR")) {
+    public init(locale: Locale = Locale(identifier: "pt-BR")) {
         self.speechRecognizer = SFSpeechRecognizer(locale: locale)
         super.init()
         setupRecognizer()
