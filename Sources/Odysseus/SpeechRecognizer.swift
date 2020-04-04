@@ -14,7 +14,7 @@ enum SpeechRecognizerStatus {
     case waiting, authorized, denied
 }
 
-typealias SpeechRecognizerErrorHandler = (Error) -> Void
+public typealias SpeechRecognizerErrorHandler = (Error) -> Void
 
 protocol SpeechRecognizer {
     func requestAuthorization()
@@ -34,7 +34,7 @@ extension SpeechRecognizer {
 }
 
 @available(iOS 13.0, *)
-class Recognizer: NSObject, SpeechRecognizer, ObservableObject {
+public class Recognizer: NSObject, SpeechRecognizer, ObservableObject {
         
     @Published var results = "" {
         willSet {
@@ -67,7 +67,7 @@ class Recognizer: NSObject, SpeechRecognizer, ObservableObject {
         requestAuthorization()
     }
     
-    func requestAuthorization() {
+    public func requestAuthorization() {
         SFSpeechRecognizer.requestAuthorization { [weak self] (status) in
             OperationQueue.main.addOperation {
                 self?.updateStatus(status)
@@ -75,7 +75,7 @@ class Recognizer: NSObject, SpeechRecognizer, ObservableObject {
         }
     }
         
-    func startRecognizing(errorHandler: SpeechRecognizerErrorHandler? = nil) {
+    public func startRecognizing(errorHandler: SpeechRecognizerErrorHandler? = nil) {
         request = SFSpeechAudioBufferRecognitionRequest()
         node = audioEngine.inputNode
         guard let request = self.request,
@@ -114,7 +114,7 @@ class Recognizer: NSObject, SpeechRecognizer, ObservableObject {
         }
     }
     
-    func stopRecognizing() {
+    public func stopRecognizing() {
         request?.endAudio()
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
@@ -151,7 +151,7 @@ extension Recognizer {
 @available(iOS 13.0, *)
 extension Recognizer: SFSpeechRecognizerDelegate {
     
-    func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer,
+    public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer,
                           availabilityDidChange available: Bool) {
         isAvailable = available
     }
