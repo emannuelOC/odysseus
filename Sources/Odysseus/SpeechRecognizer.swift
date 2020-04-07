@@ -16,27 +16,10 @@ public enum SpeechRecognizerStatus {
 
 public typealias SpeechRecognizerErrorHandler = (Error) -> Void
 
-protocol SpeechRecognizer {
-    func requestAuthorization()
-    func startRecognizing(errorHandler: SpeechRecognizerErrorHandler?)
-    func stopRecognizing()
-    
-    var audioLevel: Double { get }
-    var isAvailable: Bool { get }
-    var results: String { get }
-    var authorizationStatus: SpeechRecognizerStatus { get }
-}
-
-extension SpeechRecognizer {
-    func startRecognizing(errorHandler: SpeechRecognizerErrorHandler? = nil) {
-        self.startRecognizing(errorHandler: errorHandler)
-    }
-}
-
-@available(iOS 13.0, *)
-public class Recognizer: NSObject, SpeechRecognizer, ObservableObject {
+@available(iOS 10.0, *)
+public class SpeechRecognizer: NSObject {
         
-    @Published public var results = ""
+    public var results = ""
     
     public var audioLevel = 0.0
     
@@ -119,8 +102,8 @@ public class Recognizer: NSObject, SpeechRecognizer, ObservableObject {
     
 }
 
-@available(iOS 13.0, *)
-extension Recognizer {
+@available(iOS 10.0, *)
+extension SpeechRecognizer {
     
     fileprivate func measureAudio(buffer: AVAudioPCMBuffer) {
         audioLevel = 7000.0 / audioMeasurer.level(for: buffer)
@@ -144,8 +127,8 @@ extension Recognizer {
 }
 
 
-@available(iOS 13.0, *)
-extension Recognizer: SFSpeechRecognizerDelegate {
+@available(iOS 10.0, *)
+extension SpeechRecognizer: SFSpeechRecognizerDelegate {
     
     public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer,
                           availabilityDidChange available: Bool) {
