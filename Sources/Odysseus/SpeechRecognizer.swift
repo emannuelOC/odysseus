@@ -36,11 +36,7 @@ extension SpeechRecognizer {
 @available(iOS 13.0, *)
 public class Recognizer: NSObject, SpeechRecognizer, ObservableObject {
         
-    @Published public var results = "" {
-        willSet {
-            objectWillChange.send()
-        }
-    }
+    @Published public var results = ""
     
     public var audioLevel = 0.0
     
