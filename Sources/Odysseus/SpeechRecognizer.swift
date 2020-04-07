@@ -9,6 +9,7 @@
 import Foundation
 import Accelerate
 import Speech
+import Combine
 
 public enum SpeechRecognizerStatus {
     case waiting, authorized, denied
@@ -16,10 +17,26 @@ public enum SpeechRecognizerStatus {
 
 public typealias SpeechRecognizerErrorHandler = (Error) -> Void
 
-@available(iOS 10.0, *)
-public class SpeechRecognizer: NSObject {
+protocol SpeechRecognizer {
+    func requestAuthorization()
+    func startRecognizing(errorHandler: SpeechRecognizerErrorHandler?)
+    func stopRecognizing()
+    
+    var audioLevel: Double { get }
+    var isAvailable: Bool { get }
+    var results: String { get }
+    var authorizationStatus: SpeechRecognizerStatus { get }
+}
+
+extension SpeechRecognizer {
+    func startRecognizing(errorHandler: SpeechRecognizerErrorHandler? = nil) {
+        self.startRecognizing(errorHandler: errorHandler)
+    }
+}
+
+public class Recognizer: NSObject, SpeechRecognizer, ObservableObject {
         
-    public var results = ""
+    @Published public var results = ""
     
     public var audioLevel = 0.0
     
@@ -102,8 +119,7 @@ public class SpeechRecognizer: NSObject {
     
 }
 
-@available(iOS 10.0, *)
-extension SpeechRecognizer {
+extension Recognizer {
     
     fileprivate func measureAudio(buffer: AVAudioPCMBuffer) {
         audioLevel = 7000.0 / audioMeasurer.level(for: buffer)
@@ -127,8 +143,7 @@ extension SpeechRecognizer {
 }
 
 
-@available(iOS 10.0, *)
-extension SpeechRecognizer: SFSpeechRecognizerDelegate {
+extension Recognizer: SFSpeechRecognizerDelegate {
     
     public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer,
                           availabilityDidChange available: Bool) {
