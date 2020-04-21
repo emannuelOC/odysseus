@@ -21,17 +21,17 @@ public class SpeechRecognizer: NSObject, ObservableObject {
         
     @Published public var results = ""
     
+    var speechRecognizer: SFSpeechRecognizer?
+    
+    var audioEngine = AVAudioEngine()
+    
     public var audioLevel = 0.0
     
     public var isAvailable = true
     
     public var authorizationStatus = SpeechRecognizerStatus.waiting
     
-    private var speechRecognizer: SFSpeechRecognizer?
-    
     private var task: SFSpeechRecognitionTask?
-    
-    private let audioEngine = AVAudioEngine()
     
     private var request: SFSpeechAudioBufferRecognitionRequest?
     
