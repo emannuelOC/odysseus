@@ -44,6 +44,7 @@ public class SpeechRecognizer: NSObject, ObservableObject {
         super.init()
         setupRecognizer()
         requestAuthorization()
+        request = SFSpeechAudioBufferRecognitionRequest()
     }
     
     public func requestAuthorization() {

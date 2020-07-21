@@ -111,11 +111,9 @@ final class OdysseusTests: XCTestCase {
         let mockRecognizer = MockRecognizer()!
         
         sut.speechRecognizer(mockRecognizer, availabilityDidChange: true)
-        
         XCTAssert(sut.isAvailable)
         
         sut.speechRecognizer(mockRecognizer, availabilityDidChange: false)
-        
         XCTAssertFalse(sut.isAvailable)
         
     }
