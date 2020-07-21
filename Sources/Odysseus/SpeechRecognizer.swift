@@ -11,8 +11,8 @@ import Accelerate
 import Speech
 import Combine
 
-public enum SpeechRecognizerStatus {
-    case waiting, authorized, denied
+public protocol SpeechRecognizerDelegate: class {
+    func speechRecognizer(_ speechRecognizer: SpeechRecognizer, didChange status: SpeechRecognizer.Status)
 }
 
 public typealias SpeechRecognizerErrorHandler = (Error) -> Void
@@ -25,7 +25,13 @@ public class SpeechRecognizer: NSObject, ObservableObject {
     
     public var isAvailable = true
     
-    public var authorizationStatus = SpeechRecognizerStatus.waiting
+    public weak var delegate: SpeechRecognizerDelegate?
+    
+    public var authorizationStatus = Status.waiting {
+        didSet {
+            delegate?.speechRecognizer(self, didChange: authorizationStatus)
+        }
+    }
     
     private var speechRecognizer: SFSpeechRecognizer?
     
@@ -38,6 +44,10 @@ public class SpeechRecognizer: NSObject, ObservableObject {
     private var audioMeasurer = AudioMeasurer()
     
     private var node: AVAudioInputNode?
+    
+    public enum Status {
+        case waiting, authorized, denied
+    }
     
     public init(locale: Locale = Locale(identifier: "pt-BR")) {
         self.speechRecognizer = SFSpeechRecognizer(locale: locale)
