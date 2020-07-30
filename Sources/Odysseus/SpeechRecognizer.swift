@@ -7,12 +7,19 @@
 //
 
 import Foundation
-import Accelerate
 import Speech
-import Combine
+
+public protocol SpeechSegment {
+    var substring: String { get }
+        var timestamp: Double { get }
+        var duration: Double { get }
+}
+
+extension SFTranscriptionSegment: SpeechSegment {}
 
 public protocol SpeechRecognizerDelegate: class {
     func speechRecognizer(_ speechRecognizer: SpeechRecognizer, didChange status: SpeechRecognizer.Status)
+    func speechRecognizer(_ speechRecognizer: SpeechRecognizer, didFinishWith segments: [SpeechSegment])
 }
 
 public typealias SpeechRecognizerErrorHandler = (Error) -> Void
@@ -87,19 +94,24 @@ public class SpeechRecognizer: NSObject, ObservableObject {
         }
         request.shouldReportPartialResults = true
         task = speechRecognizer?.recognitionTask(with: request) { [weak self] (result, error) in
+            guard let self = self else { return }
           var isFinal = false
           
             if let result = result {
-                self?.results = result.bestTranscription.formattedString
+                self.results = result.bestTranscription.formattedString
                 isFinal = result.isFinal
             }
             
             if error != nil || isFinal {
-                self?.audioEngine.stop()
-                self?.node?.removeTap(onBus: 0)
+                self.audioEngine.stop()
+                self.node?.removeTap(onBus: 0)
                 
-                self?.request = nil
-                self?.task = nil
+                self.request = nil
+                self.task = nil
+            }
+            
+            if isFinal {
+                self.delegate?.speechRecognizer(self, didFinishWith: result?.bestTranscription.segments ?? [])
             }
         }
     }
