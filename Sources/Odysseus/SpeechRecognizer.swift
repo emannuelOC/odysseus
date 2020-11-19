@@ -56,8 +56,11 @@ public class SpeechRecognizer: NSObject, ObservableObject {
         case waiting, authorized, denied
     }
     
-    public init(locale: Locale = Locale(identifier: "pt-BR")) {
+    private var contextualStrings: [String]
+    
+    public init(locale: Locale = Locale(identifier: "pt-BR"), contextualStrings: [String] = []) {
         self.speechRecognizer = SFSpeechRecognizer(locale: locale)
+        self.contextualStrings = contextualStrings
         super.init()
         setupRecognizer()
         requestAuthorization()
@@ -74,6 +77,7 @@ public class SpeechRecognizer: NSObject, ObservableObject {
         
     public func startRecognizing(errorHandler: SpeechRecognizerErrorHandler? = nil) {
         request = SFSpeechAudioBufferRecognitionRequest()
+        request?.contextualStrings = contextualStrings
         node = audioEngine.inputNode
         guard let request = self.request,
             let node = self.node else {
